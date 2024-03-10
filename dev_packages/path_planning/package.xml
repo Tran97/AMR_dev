@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>path_planning</name>
+  <version>0.0.1</version>
+  <description>The customp ath_planning package</description>
+
+  <maintainer email="your_email@example.com">Your Name</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>grid_map_ros</build_depend>
+  <build_depend>nav_msgs</build_depend>
+
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>grid_map_ros</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+
+  <export>
+  </export>
+</package>

@@ -1,0 +1,7 @@
+<launch>
+    <node name="publish_goal_node" pkg="bluerov_path_planning" type="publish_goal.py" output="screen">
+        <param name="goal_x" value="-250.0"/>
+        <param name="goal_y" value="0.0"/>
+        <param name="goal_z" value="0.0"/>
+    </node>
+</launch>

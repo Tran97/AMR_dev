@@ -65,6 +65,10 @@ services:
     user: ${USERNAME:-devuser}
     command: bash -c "sudo chmod 777 -R /overlay_ws/ && exec sleep infinity"
   
+  sim:
+    extends: dev
+    command: roslaunch bluerov2_gazebo start_pid_demo.launch
+
   #viz:
     #extends: dev
     #command: rviz -d /overlay_ws/src/some_folder/rviz.rviz  

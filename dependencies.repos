@@ -1,15 +1,5 @@
 repositories:
-
-  bluerov2:
+  
+  bluerov_path_planning:
     type: git
-    url: https://github.com/yaqub93/bluerov2.git 
-
-
-  bluerob_simple_command:
-    type: git
-    url: https://github.com/yaqub93/bluerov_simple_command.git 
-
-
-  uuv_simulator:
-    type: git
-    url: https://github.com/arturmiller/uuv_simulator.git 
+    url: https://github.com/yaqub93/bluerov_path_planning.git

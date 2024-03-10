@@ -1,0 +1,73 @@
+<launch>
+    <!-- Flag to start recoding a rosbag  -->
+    <arg name="gui" default="true"/>
+
+    <!-- Initial position and heading of the vehicle (wrt Gazebo's inertial frame)  -->
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="-34.5"/>
+    <arg name="yaw" default="0.0"/>
+
+    <arg name="use_ned_frame" default="false"/>
+    <arg name="record_directory" default="/overlay_ws/"/>
+
+    <!-- Initialize the Gazebo world  -->
+    <include file="$(find bluerov2_description)/launch/bridge.launch">
+        <!-- <arg name="gui" default="$(arg gui)"/> -->
+    </include>
+
+    <!-- Add the BlueROV2 vehicle to the world  -->
+    <include file="$(find bluerov2_description)/launch/upload.launch">
+        <arg name="x" default="$(arg x)"/>
+        <arg name="y" default="$(arg y)"/>
+        <arg name="z" default="$(arg z)"/>
+        <arg name="yaw" default="$(arg yaw)"/>
+        <arg name="use_ned_frame" value="$(arg use_ned_frame)"/>
+    </include>
+
+    <include file="$(find ts4_pid_tuning)/launch/control_position.launch"> 
+        <arg name="uuv_name" value="bluerov2"/> 
+        <arg name="model_name" value="bluerov2"/> 
+    </include> 
+
+    <node pkg="rosbag"
+          type="record"
+          name="record_bluerov2_data"
+          args="record -o $(arg record_directory) /bluerov2/cmd_pose /bluerov2/cmd_vel /bluerov2/pose_gt /bluerov2/cmd_euler_angle /bluerov2/euler_angle_gt 
+          /bluerov2/thrusters/0/thrust /bluerov2/thrusters/1/thrust /bluerov2/thrusters/2/thrust /bluerov2/thrusters/3/thrust 
+          /bluerov2/thrusters/4/thrust /bluerov2/thrusters/5/thrust" 
+          output="screen">
+    </node>
+
+    <node pkg="bluerov2_control"
+          type="odometry_to_path.py"
+          name="odometry_to_path"
+          output="screen">
+    </node>
+
+    <node pkg="bluerov2_control"
+          type="odom_quat_to_euler.py"
+          name="odom_quat_to_euler"
+          output="screen">
+    </node>
+
+    <node pkg="bluerov2_control"
+          type="pose_stamped_to_euler.py"
+          name="pose_stamped_to_euler"
+          output="screen">
+    </node>
+
+    <node name="vel_plot"
+            pkg="rqt_plot"
+            type="rqt_plot"
+            args="/bluerov2/cmd_vel/angular/z /bluerov2/pose_gt/twist/twist/angular/z" />
+
+    <node name="pos_plot"
+            pkg="rqt_plot"
+            type="rqt_plot"
+            args="/bluerov2/cmd_euler_angle/z /bluerov2/euler_angle_gt/z" />
+
+    <!-- Start RViz  -->
+    <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find bluerov2_control)/rviz/bluerov2_control.rviz"/>
+    
+</launch>

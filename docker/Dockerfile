@@ -25,7 +25,9 @@ RUN apt-get update && apt-get install -y \
   ros-${ROS_DISTRO}-robot-localization* \
   ros-${ROS_DISTRO}-realsense* \
   ros-${ROS_DISTRO}-geodesy \
-  ros-${ROS_DISTRO}-geographic-msgs
+  ros-${ROS_DISTRO}-geographic-msgs \
+  ros-${ROS_DISTRO}-costmap-2d \
+  ros-${ROS_DISTRO}-octomap-msgs
 
 # Create Catkin workspace 
 RUN mkdir -p /underlay_ws/src 
