@@ -1,0 +1,3 @@
+[submodule "course_repo"]
+	path = course_repo
+	url = https://gitlab.gbar.dtu.dk/dtu-asl/courses/34763-autonomous-marine-robotics.git

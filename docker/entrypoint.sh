@@ -19,5 +19,8 @@ then
   echo "Sourced overlay workspace"
 fi
 
+# Add Neptus folder to PATH
+export PATH=/underlay_ws/src/neptus:$PATH
+
 # Execute the command passed into this entrypoint
 exec "$@"

@@ -29,11 +29,26 @@ RUN apt-get update && apt-get install -y \
   ros-${ROS_DISTRO}-costmap-2d \
   ros-${ROS_DISTRO}-octomap-msgs
 
+# Update package index and install JDK 11 and gnome-terminal
+RUN apt update && \
+    apt remove -y default-jre && \
+    apt install -y openjdk-11-jdk gnome-terminal
+
 # Create Catkin workspace 
 RUN mkdir -p /underlay_ws/src 
 WORKDIR /underlay_ws/src
 COPY dependencies.repos .
 RUN vcs import < dependencies.repos
+
+WORKDIR /underlay_ws/src/neptus
+RUN ./gradlew
+
+WORKDIR /underlay_ws/src
+COPY course_repo/ros_ws/src/ /underlay_ws/src/
+COPY course_repo/Training_Sessions/TS5_Mission_Planning/ts5_ros_ws/src/ /underlay_ws/src/
+
+RUN cp bluerov2_neptus/vehicle-defs/00-bluerov2-1.nvcl /underlay_ws/src/neptus/vehicles-defs/
+
 RUN source /opt/ros/noetic/setup.bash \
  && catkin init 
 
@@ -42,6 +57,7 @@ RUN cd /underlay_ws \
  && source /opt/ros/noetic/setup.bash \
  && rosdep install -y --from-paths src --ignore-src \
  && catkin build
+
 
 # Remove display warnings
 RUN mkdir /tmp/runtime-root
@@ -62,6 +78,9 @@ ENTRYPOINT [ "/entrypoint.sh" ]
 # Overlay Image #
 ###############################################################################################
 FROM base AS overlay
+
+# Run ROS command to copy files
+
 # Create an overlay Catkin workspace
 RUN source /opt/ros/noetic/setup.bash \
  && mkdir -p /overlay_ws/src \
@@ -101,7 +120,7 @@ RUN groupadd --gid $GID $USERNAME \
  && chown -R ${UID}:${GID} /home/${USERNAME}
 
 # Set the ownership of the overlay workspace to the new user
-RUN chown -R ${UID}:${GID} /overlay_ws/ /underlay_ws/
+RUN chown -R ${UID}:${GID} /overlay_ws/
 
 
 # Set the user and source entrypoint in the user's .bashrc file

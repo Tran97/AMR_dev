@@ -1,5 +1,6 @@
 repositories:
-  
-  bluerov_path_planning:
+
+  neptus:
     type: git
-    url: https://github.com/yaqub93/bluerov_path_planning.git
+    url: https://github.com/LSTS/neptus.git
+    version: 38c7f41a9885c6b059f79b38861edb4b7b67511b 
