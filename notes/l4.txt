@@ -1,1 +1,0 @@
-Openloop without the control law and closed loop with.
